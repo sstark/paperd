@@ -15,7 +15,7 @@ on an epaper display.
 CONFIG_NAME = "paperd"
 CONFIG_VERSION = "v1"
 CONFIG_FILE = "paperd.yml"
-OUTPUTS = ["pil", "epd2in9"]
+OUTPUTS = ["pil", "tk", "epd2in9"]
 DEFAULT_OUTPUT = "pil"
 
 def readConfigFile(filename):

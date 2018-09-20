@@ -4,7 +4,7 @@ paperd:
     orientation: 1
     output: epd2in9
     colordepth: 1
-    maxfps: 10
+    maxfps: 4
     areas:
       - name: background
         type:
