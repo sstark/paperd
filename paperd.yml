@@ -1,0 +1,23 @@
+paperd:
+   v1:
+    resolution: {x: &x 296, y: &y 128}
+    orientation: 1
+    output: epd2in9
+    colordepth: 1
+    maxfps: 10
+    areas:
+      - name: background
+        type:
+          format: gif
+          overflow: resize
+        origin: {x: 0, y: 0}
+        size: {x: *x, y: *y}
+      - name: title
+        type:
+          format: text
+          overflow: scrolling
+          font:
+            face: fonts/bla.ttf
+            size: 32
+        origin: {x: 50, y: 0}
+        size: {x: 246, y: 64}
