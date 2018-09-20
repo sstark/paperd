@@ -5,6 +5,7 @@ from pprint import pprint
 import sys
 import argparse
 import importlib
+import os
 
 __doc__ = """epaper display server
 
@@ -14,8 +15,8 @@ on an epaper display.
 CONFIG_NAME = "paperd"
 CONFIG_VERSION = "v1"
 CONFIG_FILE = "paperd.yml"
-OUTPUTS = ["show", "epd2in9"]
-DEFAULT_OUTPUT = "show"
+OUTPUTS = ["pil", "epd2in9"]
+DEFAULT_OUTPUT = "pil"
 
 def readConfigFile(filename):
     with open(filename, 'r') as configFile:
@@ -41,9 +42,20 @@ def readArgs():
                    help='output driver (overrides value from config file)')
     return vars(p.parse_args())
 
+def loadOutputModule(drivername):
+    try:
+        if drivername.startswith("epd"):
+            return importlib.import_module("show_epd")
+        else:
+            return importlib.import_module("show_"+drivername)
+    except ModuleNotFoundError as e:
+        print("could not load output module '%s' (or one of its dependencies)" % drivername)
+        print(e)
+        sys.exit(1)
 
 args = readArgs()
 pprint(args)
+
 try:
     conf = readConfigFile(args["config"])
 except FileNotFoundError as e:
@@ -51,18 +63,14 @@ except FileNotFoundError as e:
     print(e)
     sys.exit(1)
 
-output = DEFAULT_OUTPUT
+outputDriver = DEFAULT_OUTPUT
 if args["output"] is None:
-    output = conf["output"]
+    outputDriver = conf["output"]
 else:
-    output = args["output"]
-try:
-    out = importlib.import_module(output)
-except ModuleNotFoundError as e:
-    print("could not load output module (or one of its dependencies)")
-    print(e)
-    sys.exit(1)
+    outputDriver = args["output"]
 
-out.init()
+out = loadOutputModule(outputDriver)
+rc = out.RenderContext(outputDriver)
+rc.run()
 
 pprint(conf)
