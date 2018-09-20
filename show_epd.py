@@ -1,9 +1,10 @@
 
 import importlib
 import sys
+from render import BaseRenderContext
 
-class RenderContext():
-    def __init__(self, drivername):
+class RenderContext(BaseRenderContext):
+    def __init__(self, drivername, conf):
         try:
             self.driver = importlib.import_module("epd."+drivername)
         except ModuleNotFoundError as e:
@@ -11,6 +12,7 @@ class RenderContext():
             print(e)
             sys.exit(1)
         print("init epd output module (driver=%s)" % drivername)
+        BaseRenderContext.__init__(self, drivername, conf)
 
     def run(self):
         print("run epd output module")

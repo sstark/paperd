@@ -70,7 +70,7 @@ else:
     outputDriver = args["output"]
 
 out = loadOutputModule(outputDriver)
-rc = out.RenderContext(outputDriver)
+rc = out.RenderContext(outputDriver, conf)
 rc.run()
 
 pprint(conf)
