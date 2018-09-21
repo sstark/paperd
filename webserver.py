@@ -3,6 +3,9 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from functools import partial
 import json
 import re
+import io
+
+MAX_UPLOAD_SIZE = 100000
 
 class WebAPI(BaseHTTPRequestHandler):
 
@@ -13,7 +16,7 @@ class WebAPI(BaseHTTPRequestHandler):
             "/v1/areas$": self.getApiFunc("getAreas"),
         }
         self.urlsPUT = {
-            "/v1/areas/(?P<area>%s)": self.getApiFunc("setArea")
+            "/v1/areas/(.*)": self.getApiFunc("setArea")
         }
         super().__init__(*args, **kwargs)
 
@@ -34,7 +37,7 @@ class WebAPI(BaseHTTPRequestHandler):
                 except:
                     name = None
                 return routes[k], name
-        return None
+        return (None, None)
 
     def do_GET(self):
         func, name = self.matchUrl(self.urlsGET)
@@ -52,10 +55,24 @@ class WebAPI(BaseHTTPRequestHandler):
         self.wfile.write(bytes(json.dumps(out).encode("utf-8")))
 
     def do_PUT(self):
-        content_length = int(self.headers['Content-Length'])
-        post_data = self.rfile.read(content_length)
-        self.send_response(200)
-        client.close()
+        func, name = self.matchUrl(self.urlsPUT)
+        if func:
+            content_length = int(self.headers['Content-Length'])
+            if content_length > MAX_UPLOAD_SIZE:
+                self.send_response(413)
+                out = "too much data"
+            else:
+                post_data = self.rfile.read(min(content_length, MAX_UPLOAD_SIZE))
+                print("%d bytes read" % len(post_data))
+                self.send_response(200)
+                out = "ok"
+                func(name, post_data)
+        else:
+            out = "not found"
+            self.send_response(404)
+        self.send_header('Content-type', 'text/plain')
+        self.end_headers()
+        self.wfile.write(bytes(json.dumps(out).encode("utf-8")))
 
 class WebServer():
     def __init__(self, routeMap, hostname="localhost", port=2354):

@@ -21,9 +21,6 @@ class RenderContext(BaseRenderContext):
         self.root.quit()
 
     def display(self):
-        a = random.randint(0,self.width-80)
-        self.draw.rectangle((0, 0, self.width, self.height), fill = 255, outline = 255)
-        self.draw.ellipse((20+a, 20, 80+a, 80), fill = 0, outline = 0)
         self.tkimage.paste(self.image)
         self.root.after(self.delay, self.display)
 

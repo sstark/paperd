@@ -2,6 +2,7 @@
 from PIL import Image
 import webserver
 from threading import Thread
+import io
 
 class BaseRenderContext():
     def __init__(self, drivername, conf):
@@ -18,10 +19,15 @@ class BaseRenderContext():
     def apiGetArea(self, area):
         return [ x for x in self.conf["areas"] if x["name"] == area ]
 
+    def apiSetArea(self, area, data):
+        newimage = Image.open(io.BytesIO(data))
+        self.image.paste(newimage)
+
     def makeRouteMap(self):
         return {
             "getAreas": self.apiGetAreas,
-            "getArea": self.apiGetArea
+            "getArea": self.apiGetArea,
+            "setArea": self.apiSetArea
         }
 
     def startWebserver(self):
