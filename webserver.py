@@ -50,7 +50,7 @@ class WebAPI(BaseHTTPRequestHandler):
         else:
             out = "not found"
             self.send_response(404)
-        self.send_header('Content-type', 'text/plain')
+        self.send_header('Content-Type', 'application/json')
         self.end_headers()
         self.wfile.write(bytes(json.dumps(out).encode("utf-8")))
 
@@ -70,7 +70,7 @@ class WebAPI(BaseHTTPRequestHandler):
         else:
             out = "not found"
             self.send_response(404)
-        self.send_header('Content-type', 'text/plain')
+        self.send_header('Content-Type', 'application/json')
         self.end_headers()
         self.wfile.write(bytes(json.dumps(out).encode("utf-8")))
 
