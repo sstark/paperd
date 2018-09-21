@@ -69,9 +69,13 @@ class WebAPI(BaseHTTPRequestHandler):
                 self.end_headers()
                 post_data = self.rfile.read(min(content_length, MAX_UPLOAD_SIZE))
                 print("%d bytes read" % len(post_data))
-                self.send_response(200)
-                out = "ok"
-                func(name, post_data)
+                ret = func(name, post_data)
+                if ret:
+                    self.send_response(404)
+                    out = ret
+                else:
+                    self.send_response(200)
+                    out = "ok"
         else:
             out = "not found"
             self.send_response(404)

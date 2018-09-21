@@ -14,7 +14,11 @@ class BaseRenderContext():
         self.startWebserver()
 
     def getAreaByName(self, area):
-        return [ x for x in self.conf["areas"] if x["name"] == area ][0]
+        areas = [ x for x in self.conf["areas"] if x["name"] == area ]
+        if areas:
+            return areas[0]
+        else:
+            return {}
 
     def apiGetAreas(self):
         return [ x["name"] for x in self.conf["areas"] ]
@@ -24,6 +28,7 @@ class BaseRenderContext():
 
     def apiSetArea(self, area, data):
         a = self.getAreaByName(area)
+        if not a: return "area not found"
         x = a["origin"]["x"]
         y = a["origin"]["y"]
         xs = a["size"]["x"]
@@ -32,6 +37,7 @@ class BaseRenderContext():
         if a["type"]["overflow"] == "resize":
             newimage = newimage.resize((xs, xy))
         self.image.paste(newimage, (x, y))
+        return None
 
     def makeRouteMap(self):
         return {
