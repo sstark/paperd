@@ -15,6 +15,10 @@ class RenderContext(BaseRenderContext):
         self.label = tk.Label(self.root, image=self.tkimage)
         self.label.image = self.tkimage
         self.label.pack()
+        self.root.bind('q', self.closeWindow)
+
+    def closeWindow(self, event):
+        self.root.quit()
 
     def display(self):
         a = random.randint(0,self.width-80)
