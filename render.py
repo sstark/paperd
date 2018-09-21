@@ -28,15 +28,20 @@ class BaseRenderContext():
 
     def apiSetArea(self, area, data):
         a = self.getAreaByName(area)
-        if not a: return "area not found"
-        x = a["origin"]["x"]
-        y = a["origin"]["y"]
-        xs = a["size"]["x"]
-        xy = a["size"]["y"]
-        newimage = Image.open(io.BytesIO(data))
-        if a["type"]["overflow"] == "resize":
-            newimage = newimage.resize((xs, xy))
-        self.image.paste(newimage, (x, y))
+        if not a:
+            return "area not found"
+        aformat = a["type"]["format"]
+        if aformat == "image":
+            x = a["origin"]["x"]
+            y = a["origin"]["y"]
+            xs = a["size"]["x"]
+            xy = a["size"]["y"]
+            newimage = Image.open(io.BytesIO(data))
+            if a["type"]["overflow"] == "resize":
+                newimage = newimage.resize((xs, xy))
+            self.image.paste(newimage, (x, y))
+        else:
+            return "unknown area format '%s'" % aformat
         return None
 
     def makeRouteMap(self):

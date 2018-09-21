@@ -8,7 +8,7 @@ paperd:
     areas:
       - name: background
         type:
-          format: gif
+          format: image
           overflow: resize
         origin: {x: 0, y: 0}
         size: {x: *x, y: *y}
