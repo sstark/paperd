@@ -12,7 +12,7 @@ class RenderContext(BaseRenderContext):
             print(e)
             sys.exit(1)
         print("init epd output module (driver=%s)" % drivername)
-        BaseRenderContext.__init__(self, drivername, conf)
+        super().__init__(drivername, conf)
 
     def run(self):
         print("run epd output module")

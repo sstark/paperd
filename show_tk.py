@@ -7,7 +7,7 @@ import random
 class RenderContext(BaseRenderContext):
     def __init__(self, drivername, conf):
         print("init tk output module")
-        BaseRenderContext.__init__(self, drivername, conf)
+        super().__init__(drivername, conf)
         self.draw = ImageDraw.Draw(self.image)
         self.delay = 1000//self.fps
         self.root = tk.Tk()

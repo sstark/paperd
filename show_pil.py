@@ -5,7 +5,7 @@ from PIL import Image, ImageDraw
 class RenderContext(BaseRenderContext):
     def __init__(self, drivername, conf):
         print("init pil output module")
-        BaseRenderContext.__init__(self, drivername, conf)
+        super().__init__(drivername, conf)
 
     def display(self):
         self.image.show()
