@@ -15,9 +15,13 @@ class BaseRenderContext():
     def apiGetAreas(self):
         return [ x["name"] for x in self.conf["areas"] ]
 
+    def apiGetArea(self, area):
+        return [ x for x in self.conf["areas"] if x["name"] == area ]
+
     def makeRouteMap(self):
         return {
-            "getAreas": self.apiGetAreas
+            "getAreas": self.apiGetAreas,
+            "getArea": self.apiGetArea
         }
 
     def startWebserver(self):

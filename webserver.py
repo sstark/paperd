@@ -2,13 +2,18 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from functools import partial
 import json
+import re
 
 class WebAPI(BaseHTTPRequestHandler):
 
     def __init__(self, routeMap, *args, **kwargs):
         self.apiFuncs = routeMap
         self.urlsGET = {
-            "/v1/areas": self.getApiFunc("getAreas")
+            "/v1/areas/(.*)": self.getApiFunc("getArea"),
+            "/v1/areas$": self.getApiFunc("getAreas"),
+        }
+        self.urlsPUT = {
+            "/v1/areas/(?P<area>%s)": self.getApiFunc("setArea")
         }
         super().__init__(*args, **kwargs)
 
@@ -19,12 +24,25 @@ class WebAPI(BaseHTTPRequestHandler):
         return self.apiFuncs.get(name, self.unknownApiFunc)
 
     def matchUrl(self, routes):
-        return routes.get(self.path, None)
+        # first return value is actual function to run
+        # second return value "name" is set to first match group of the route
+        for k in routes:
+            m = re.match(k, self.path)
+            if m:
+                try:
+                    name = m.group(1)
+                except:
+                    name = None
+                return routes[k], name
+        return None
 
     def do_GET(self):
-        func = self.matchUrl(self.urlsGET)
+        func, name = self.matchUrl(self.urlsGET)
         if func:
-            out = func()
+            if name:
+                out = func(name)
+            else:
+                out = func()
             self.send_response(200)
         else:
             out = "not found"
