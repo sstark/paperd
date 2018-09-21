@@ -62,6 +62,11 @@ class WebAPI(BaseHTTPRequestHandler):
                 self.send_response(413)
                 out = "too much data"
             else:
+                # Without those two lines response time is slow for PUT.
+                # Normally this should be handled by the handle_expect_100
+                # method, but I could not get it to work.
+                self.send_response(100);
+                self.end_headers()
                 post_data = self.rfile.read(min(content_length, MAX_UPLOAD_SIZE))
                 print("%d bytes read" % len(post_data))
                 self.send_response(200)
