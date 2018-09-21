@@ -13,15 +13,21 @@ class BaseRenderContext():
         self.image = Image.new('1', (self.width, self.height), 255)
         self.startWebserver()
 
+    def getAreaByName(self, area):
+        return [ x for x in self.conf["areas"] if x["name"] == area ][0]
+
     def apiGetAreas(self):
         return [ x["name"] for x in self.conf["areas"] ]
 
     def apiGetArea(self, area):
-        return [ x for x in self.conf["areas"] if x["name"] == area ]
+        return self.getAreaByName(area)
 
     def apiSetArea(self, area, data):
         newimage = Image.open(io.BytesIO(data))
-        self.image.paste(newimage)
+        a = self.getAreaByName(area)
+        x = a["origin"]["x"]
+        y = a["origin"]["y"]
+        self.image.paste(newimage, (x, y))
 
     def makeRouteMap(self):
         return {
