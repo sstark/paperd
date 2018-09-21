@@ -10,11 +10,15 @@ class RenderContext(BaseRenderContext):
         super().__init__(drivername, conf)
         self.draw = ImageDraw.Draw(self.image)
         self.delay = 1000//self.fps
+        self.width = conf["resolution"]["x"]
+        self.height = conf["resolution"]["y"]
+
         self.root = tk.Tk()
         self.tkimage = ImageTk.PhotoImage('1', (self.width, self.height))
         self.label = tk.Label(self.root, image=self.tkimage)
         self.label.image = self.tkimage
         self.label.pack()
+        self.root.geometry("%dx%d+150+150" % (self.width, self.height))
         self.root.bind('q', self.closeWindow)
 
     def closeWindow(self, event):
