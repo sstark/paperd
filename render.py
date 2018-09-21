@@ -23,10 +23,14 @@ class BaseRenderContext():
         return self.getAreaByName(area)
 
     def apiSetArea(self, area, data):
-        newimage = Image.open(io.BytesIO(data))
         a = self.getAreaByName(area)
         x = a["origin"]["x"]
         y = a["origin"]["y"]
+        xs = a["size"]["x"]
+        xy = a["size"]["y"]
+        newimage = Image.open(io.BytesIO(data))
+        if a["type"]["overflow"] == "resize":
+            newimage = newimage.resize((xs, xy))
         self.image.paste(newimage, (x, y))
 
     def makeRouteMap(self):
