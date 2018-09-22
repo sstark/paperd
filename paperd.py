@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 import yaml
-from pprint import pprint
 import sys
 import argparse
 import importlib
 import os
+import logging
 
 __doc__ = """epaper display server
 
@@ -19,16 +19,18 @@ OUTPUTS = ["pil", "tk", "epd2in9"]
 DEFAULT_OUTPUT = "pil"
 DEFAULT_SCALE = 1
 
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger("paperd")
+
 def readConfigFile(filename):
     with open(filename, 'r') as configFile:
         try:
             conf = yaml.safe_load(configFile)[CONFIG_NAME][CONFIG_VERSION]
         except KeyError:
-            print("could not find configuration in %s" % filename)
+            log.exception("could not find configuration in %s" % filename)
             sys.exit(1)
-        except yaml.parser.ParserError as e:
-            print("syntax error")
-            print(e)
+        except yaml.parser.ParserError:
+            log.exception("syntax error")
             sys.exit(1)
     return conf
 
@@ -53,19 +55,19 @@ def loadOutputModule(drivername):
             return importlib.import_module("show_epd")
         else:
             return importlib.import_module("show_"+drivername)
-    except ModuleNotFoundError as e:
-        print("could not load output module '%s' (or one of its dependencies)" % drivername)
-        print(e)
+    except ModuleNotFoundError:
+        log.exception("could not load output module '%s' (or one of its dependencies)" % drivername)
         sys.exit(1)
 
 args = readArgs()
-pprint(args)
+log.debug(args)
+log.info("paperd - epaper display server")
 
 try:
     conf = readConfigFile(args["config"])
 except FileNotFoundError as e:
-    print("could not open configuration file")
-    print(e)
+    log.error("could not open configuration file")
+    log.error(e)
     sys.exit(1)
 
 outputDriver = DEFAULT_OUTPUT
@@ -78,4 +80,4 @@ out = loadOutputModule(outputDriver)
 rc = out.RenderContext(outputDriver, conf, args["scale"])
 rc.run()
 
-pprint(conf)
+log.debug(conf)

@@ -4,16 +4,18 @@ import sys
 from render import BaseRenderContext
 import time
 import threading
+import logging
+
+log = logging.getLogger("paperd.show_epd")
 
 class RenderContext(BaseRenderContext):
     def __init__(self, drivername, conf, scale=1):
         try:
             self.driver = importlib.import_module("epd."+drivername)
-        except ModuleNotFoundError as e:
-            print("could not load output driver '%s' (or one of its dependencies)" % drivername)
-            print(e)
+        except ModuleNotFoundError:
+            log.exception("could not load output driver '%s' (or one of its dependencies)" % drivername)
             sys.exit(1)
-        print("init epd output module (driver=%s)" % drivername)
+        log.info("init epd output module (driver=%s)" % drivername)
         super().__init__(drivername, conf, scale)
         self.delay = 1000//self.fps
         self.screenlock = threading.Lock()
@@ -56,10 +58,10 @@ class RenderContext(BaseRenderContext):
         self.screenlock.release()
 
     def run(self):
-        print("run epd output module")
+        log.info("run epd output module")
         while True:
             time.sleep(10)
             # at this point we could do regular full redraws
             # to repair messed up parts of the display
-            #print("epd full redraw")
+            #log.info("epd full redraw")
             #self.display()

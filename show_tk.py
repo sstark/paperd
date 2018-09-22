@@ -3,10 +3,13 @@ from render import BaseRenderContext
 from PIL import Image, ImageTk
 import tkinter as tk
 import random
+import logging
+
+log = logging.getLogger("paperd.show_tk")
 
 class RenderContext(BaseRenderContext):
     def __init__(self, drivername, conf, scale=1):
-        print("init tk output module")
+        log.info("init tk output module")
         super().__init__(drivername, conf, scale)
         self.delay = 1000//self.fps
         self.width = conf["resolution"]["x"]*scale
@@ -28,6 +31,6 @@ class RenderContext(BaseRenderContext):
         self.root.after(self.delay, self.display)
 
     def run(self):
-        print("run tk output module")
+        log.info("run tk output module")
         self.display()
         self.root.mainloop()

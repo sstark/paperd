@@ -4,8 +4,10 @@ from functools import partial
 import json
 import re
 import io
+import logging
 
 MAX_UPLOAD_SIZE = 100000
+log = logging.getLogger("paperd.webserver")
 
 class WebAPI(BaseHTTPRequestHandler):
 
@@ -21,7 +23,7 @@ class WebAPI(BaseHTTPRequestHandler):
         super().__init__(*args, **kwargs)
 
     def unknownApiFunc(self):
-        print("unknown API function requested")
+        log.error("unknown API function requested")
 
     def getApiFunc(self, name):
         return self.apiFuncs.get(name, self.unknownApiFunc)
@@ -68,7 +70,7 @@ class WebAPI(BaseHTTPRequestHandler):
                 self.send_response(100);
                 self.end_headers()
                 post_data = self.rfile.read(min(content_length, MAX_UPLOAD_SIZE))
-                print("%d bytes read" % len(post_data))
+                log.info("%d bytes read" % len(post_data))
                 ret = func(name, post_data)
                 if ret:
                     self.send_response(404)
@@ -87,7 +89,7 @@ class WebServer():
     def __init__(self, routeMap, hostname="localhost", port=2354):
         requestHandler = partial(WebAPI, routeMap)
         self.server = HTTPServer((hostname, port), requestHandler)
-        print("starting webserver (%s:%s)" % (hostname, port))
+        log.info("starting webserver (%s:%s)" % (hostname, port))
 
     def run(self):
         self.server.serve_forever()

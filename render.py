@@ -3,6 +3,9 @@ from PIL import Image, ImageDraw, ImageFont
 import webserver
 from threading import Thread
 import io
+import logging
+
+log = logging.getLogger("paperd.render")
 
 class BaseRenderContext():
     def __init__(self, drivername, conf, scale=1):
@@ -51,8 +54,8 @@ class BaseRenderContext():
             font = a["type"]["font"]
             try:
                 ttf = ImageFont.truetype(font["face"], font["size"])
-            except OSError as e:
-                print(e)
+            except OSError:
+                log.exception("error reading font")
                 return "font not found '%s'" % font["face"]
             newstring = data.decode("utf-8")
             if font["align"] == "right":
