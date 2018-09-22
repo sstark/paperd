@@ -27,7 +27,7 @@ Since epaper displays are notoriously slow, you can use a tk based realtime
 preview window on your development system.
 
 All testing is currently done on a Raspberry Pi Zero W and a Waveshare 2.9"
-epaper.
+epaper, using Raspbian stretch.
 
 Requirements
 ------------
@@ -100,14 +100,19 @@ Currently there is only one useful api URL:
     PUT http://localhost:2354/v1/areas/<area>
 
 This PUTs content to the area named `<area>`. The area must be defined in the
-configuration file of paperd. Say you have an area "logo", you can test this
+configuration file of paperd. Say you have an area "logo", you can test it
 with curl like this:
 
-    curl -T logo.png "http://localhost:2354/v1/areas/logo"
+    curl -T logo.png http://localhost:2354/v1/areas/logo
 
 By default, paperd will resize the image to fit in the dimensions of the area.
 However it is strongly recommende to provide the image in the correct
 resolution already, since rescaling will likely look bad at such a small scale.
+
+If the area you want to PUT something is of type text, you can use curl like
+this:
+
+    curl -X PUT -d "the text" http://localhost:2354/v1/areas/title
 
 Development
 -----------
@@ -115,7 +120,7 @@ Development
 This is an early, but working development version of paperd. Please be kind if
 it does weird things and file an issue.
 
-Sice the original waveshare epd2in9 driver is used, and there is no low level
-tweaking going on in paperd, it is unlikely this will casuse any damage to your
+Since the original waveshare epd2in9 driver is used, and there is no low level
+tweaking going on in paperd, it is unlikely this will cause any damage to your
 display or Raspberry Pi.
 
