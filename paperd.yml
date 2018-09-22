@@ -17,7 +17,7 @@ paperd:
           format: text
           overflow: scrolling
           font:
-            face: fonts/pf_tempesta_seven_condensed.ttf
+            face: examples/musicplayer/fonts/pf_tempesta_seven_condensed.ttf
             size: 24
             align: left
         origin: {x: 70, y: 0}

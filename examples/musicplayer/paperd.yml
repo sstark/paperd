@@ -1,0 +1,68 @@
+paperd:
+  v1:
+    resolution: {x: &x 296, y: &y 128}
+    orientation: 1
+    output: epd2in9
+    colordepth: 1
+    maxfps: 4
+    areas:
+      - name: background
+        type:
+          format: image
+          overflow: resize
+        origin: {x: 0, y: 0}
+        size: {x: *x, y: *y}
+      - name: run
+        type:
+          format: image
+          overflow: resize
+        origin: {x: 2, y: &icony 102}
+        size: {x: &iconw 24, y: &iconh 24}
+      - name: sleep
+        type:
+          format: image
+          overflow: resize
+        origin: {x: 52, y: *icony}
+        size: {x: *iconw, y: *iconh}
+      - name: volumebar
+        type:
+          format: image
+          overflow: resize
+        origin: {x: 88, y: *icony}
+        size: {x: 124, y: *iconh}
+      - name: volume
+        type:
+          format: image
+          overflow: resize
+        origin: {x: 88, y: *icony}
+        size: {x: *iconw, y: *iconh}
+      - name: songtitle
+        type:
+          format: text
+          overflow: scrolling
+          font:
+            face: examples/musicplayer/fonts/pf_tempesta_seven_condensed_bold.ttf
+            size: 24
+            align: left
+        origin: {x: &tx 6, y: 4}
+        size: {x: &tw 292, y: &th 48}
+      - name: artist
+        type:
+          format: text
+          overflow: scrolling
+          font:
+            face: examples/musicplayer/fonts/pf_tempesta_seven_condensed.ttf
+            size: 24
+            align: left
+        origin: {x: *tx, y: 54}
+        size: {x: *tw, y: *th}
+      - name: time
+        type:
+          format: text
+          overflow: scrolling
+          font:
+            face: examples/musicplayer/fonts/pf_tempesta_seven_condensed.ttf
+            size: 16
+            align: right
+        origin: {x: 220, y: *icony}
+        size: {x: 74, y: *iconh}
