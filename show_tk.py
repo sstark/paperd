@@ -1,6 +1,6 @@
 
 from render import BaseRenderContext
-from PIL import Image, ImageDraw, ImageTk
+from PIL import Image, ImageTk
 import tkinter as tk
 import random
 
@@ -8,7 +8,6 @@ class RenderContext(BaseRenderContext):
     def __init__(self, drivername, conf):
         print("init tk output module")
         super().__init__(drivername, conf)
-        self.draw = ImageDraw.Draw(self.image)
         self.delay = 1000//self.fps
         self.width = conf["resolution"]["x"]
         self.height = conf["resolution"]["y"]

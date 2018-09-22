@@ -1,5 +1,5 @@
 
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 import webserver
 from threading import Thread
 import io
@@ -30,15 +30,28 @@ class BaseRenderContext():
         a = self.getAreaByName(area)
         if not a:
             return "area not found"
+
+        x = a["origin"]["x"]
+        y = a["origin"]["y"]
+        xs = a["size"]["x"]
+        xy = a["size"]["y"]
         aformat = a["type"]["format"]
+
         if aformat == "image":
-            x = a["origin"]["x"]
-            y = a["origin"]["y"]
-            xs = a["size"]["x"]
-            xy = a["size"]["y"]
             newimage = Image.open(io.BytesIO(data))
             if a["type"]["overflow"] == "resize":
                 newimage = newimage.resize((xs, xy))
+            self.image.paste(newimage, (x, y))
+        elif aformat == "text":
+            newimage = Image.new('1', (xs, xy), 255)
+            newdraw = ImageDraw.Draw(newimage)
+            font = a["type"]["font"]
+            try:
+                ttf = ImageFont.truetype(font["face"], font["size"])
+            except OSError as e:
+                print(e)
+                return "font not found '%s'" % font["face"]
+            newdraw.text((0, 0), data.decode("utf-8"), font=ttf, fill=0)
             self.image.paste(newimage, (x, y))
         else:
             return "unknown area format '%s'" % aformat
