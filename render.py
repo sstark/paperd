@@ -51,7 +51,13 @@ class BaseRenderContext():
             except OSError as e:
                 print(e)
                 return "font not found '%s'" % font["face"]
-            newdraw.text((0, 0), data.decode("utf-8"), font=ttf, fill=0)
+            newstring = data.decode("utf-8")
+            if font["align"] == "right":
+                tw, th = newdraw.textsize(newstring, font=ttf)
+                shiftx = xs - tw
+            else:
+                shiftx = 0
+            newdraw.text((shiftx, 0), newstring, font=ttf, fill=0)
             self.image.paste(newimage, (x, y))
         else:
             return "unknown area format '%s'" % aformat
