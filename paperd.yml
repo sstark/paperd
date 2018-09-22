@@ -19,5 +19,6 @@ paperd:
           font:
             face: fonts/pf_tempesta_seven_condensed.ttf
             size: 24
+            align: left
         origin: {x: 70, y: 0}
         size: {x: 226, y: 64}
