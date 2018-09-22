@@ -35,8 +35,9 @@ for tk output (recommended for preview, not needed on target machine):
 
     apt python3-pil.imagetk
 
-For updating the epaper display the driver for the Waveshare 2.9" (1-color
-version) is included. More drivers will follow.
+For programing the epaper display, the driver for the Waveshare 2.9" (1-color
+version) is included. This display has a resolution of 128x296 pixels. More
+drivers will follow.
 
 
 Configuration
@@ -87,6 +88,23 @@ command line.
 For running the example on your Raspberry Pi with the epd output module, simply
 remove the `-o tk` parameter and it will use whichever driver is defined in the
 configuration.
+
+Using the API
+-------------
+
+Currently there is only one useful api URL:
+
+    PUT http://localhost:2354/v1/areas/<area>
+
+This PUTs content to the area named `<area>`. The area must be defined in the
+configuration file of paperd. Say you have an area "logo", you can test this
+with curl like this:
+
+    curl -T logo.png "http://localhost:2354/v1/areas/logo"
+
+By default, paperd will resize the image to fit in the dimensions of the area.
+However it is strongly recommende to provide the image in the correct
+resolution already, since rescaling will likely look bad at such a small scale.
 
 Development
 -----------
