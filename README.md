@@ -26,6 +26,9 @@ available and can currently only work with those.
 Since epaper displays are notoriously slow, you can use a tk based realtime
 preview window on your development system.
 
+All testing is currently done on a Raspberry Pi Zero W and a Waveshare 2.9"
+epaper.
+
 Requirements
 ------------
 
