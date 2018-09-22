@@ -5,12 +5,12 @@ import tkinter as tk
 import random
 
 class RenderContext(BaseRenderContext):
-    def __init__(self, drivername, conf):
+    def __init__(self, drivername, conf, scale=1):
         print("init tk output module")
-        super().__init__(drivername, conf)
+        super().__init__(drivername, conf, scale)
         self.delay = 1000//self.fps
-        self.width = conf["resolution"]["x"]
-        self.height = conf["resolution"]["y"]
+        self.width = conf["resolution"]["x"]*scale
+        self.height = conf["resolution"]["y"]*scale
 
         self.root = tk.Tk()
         self.tkimage = ImageTk.PhotoImage('1', (self.width, self.height))
@@ -24,7 +24,7 @@ class RenderContext(BaseRenderContext):
         self.root.quit()
 
     def display(self):
-        self.tkimage.paste(self.image)
+        self.tkimage.paste(self.image.resize((self.width, self.height)))
         self.root.after(self.delay, self.display)
 
     def run(self):

@@ -17,6 +17,7 @@ CONFIG_VERSION = "v1"
 CONFIG_FILE = "paperd.yml"
 OUTPUTS = ["pil", "tk", "epd2in9"]
 DEFAULT_OUTPUT = "pil"
+DEFAULT_SCALE = 1
 
 def readConfigFile(filename):
     with open(filename, 'r') as configFile:
@@ -40,6 +41,10 @@ def readArgs():
     p.add_argument('-o', '--output',
                    choices=OUTPUTS,
                    help='output driver (overrides value from config file)')
+    p.add_argument('-s', '--scale',
+                   default=DEFAULT_SCALE,
+                   type=int,
+                   help='scale up preview (e. g. for use on hidpi displays)')
     return vars(p.parse_args())
 
 def loadOutputModule(drivername):
@@ -70,7 +75,7 @@ else:
     outputDriver = args["output"]
 
 out = loadOutputModule(outputDriver)
-rc = out.RenderContext(outputDriver, conf)
+rc = out.RenderContext(outputDriver, conf, args["scale"])
 rc.run()
 
 pprint(conf)

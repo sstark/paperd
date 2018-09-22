@@ -5,7 +5,7 @@ from threading import Thread
 import io
 
 class BaseRenderContext():
-    def __init__(self, drivername, conf):
+    def __init__(self, drivername, conf, scale=1):
         self.conf = conf
         self.width = conf["resolution"]["x"]
         self.height = conf["resolution"]["y"]
