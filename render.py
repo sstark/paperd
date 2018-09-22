@@ -20,6 +20,9 @@ class BaseRenderContext():
         else:
             return {}
 
+    def paste(self, image, box):
+        self.image.paste(image, box)
+
     def apiGetAreas(self):
         return [ x["name"] for x in self.conf["areas"] ]
 
@@ -41,7 +44,7 @@ class BaseRenderContext():
             newimage = Image.open(io.BytesIO(data))
             if a["type"]["overflow"] == "resize":
                 newimage = newimage.resize((xs, xy))
-            self.image.paste(newimage, (x, y))
+            self.paste(newimage, (x, y))
         elif aformat == "text":
             newimage = Image.new('1', (xs, xy), 255)
             newdraw = ImageDraw.Draw(newimage)
@@ -58,7 +61,7 @@ class BaseRenderContext():
             else:
                 shiftx = 0
             newdraw.text((shiftx, 0), newstring, font=ttf, fill=0)
-            self.image.paste(newimage, (x, y))
+            self.paste(newimage, (x, y))
         else:
             return "unknown area format '%s'" % aformat
         return None
