@@ -5,6 +5,8 @@ import json
 import re
 import io
 import logging
+import socket
+import sys
 
 MAX_UPLOAD_SIZE = 100000
 log = logging.getLogger("paperd.webserver")
@@ -86,10 +88,14 @@ class WebAPI(BaseHTTPRequestHandler):
         self.wfile.write(bytes(json.dumps(out).encode("utf-8")))
 
 class WebServer():
-    def __init__(self, routeMap, hostname="localhost", port=2354):
+    def __init__(self, routeMap, address):
         requestHandler = partial(WebAPI, routeMap)
-        self.server = HTTPServer((hostname, port), requestHandler)
-        log.info("starting webserver (%s:%s)" % (hostname, port))
+        try:
+            self.server = HTTPServer(address, requestHandler)
+        except socket.gaierror:
+            log.exception("invalid listen address: %s", address)
+            sys.exit(1)
+        log.info("starting webserver (%s:%s)" % address)
 
     def run(self):
         self.server.serve_forever()

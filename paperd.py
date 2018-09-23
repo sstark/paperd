@@ -18,6 +18,8 @@ CONFIG_FILE = "paperd.yml"
 OUTPUTS = ["pil", "tk", "epd2in9"]
 DEFAULT_OUTPUT = "pil"
 DEFAULT_SCALE = 1
+WEBSERVER_DEFAULT_HOSTNAME = "localhost"
+WEBSERVER_DEFAULT_PORT = 2354
 
 try:
     loglevel = os.environ["PAPERD_LOGLEVEL"]
@@ -42,6 +44,14 @@ def readArgs():
                    default=DEFAULT_SCALE,
                    type=int,
                    help='scale up preview (e. g. for use on hidpi displays)')
+    p.add_argument('-l', '--listen',
+                   default=WEBSERVER_DEFAULT_HOSTNAME,
+                   type=str,
+                   help='address or hostname the webserver should listen on')
+    p.add_argument('-p', '--port',
+                   default=WEBSERVER_DEFAULT_PORT,
+                   type=int,
+                   help='port number the webserver should listen on')
     return vars(p.parse_args())
 
 def loadOutputModule(drivername):
@@ -73,6 +83,8 @@ if args["output"] is None:
     outputDriver = conf["output"]
 else:
     outputDriver = args["output"]
+
+conf["listen"] = (args["listen"], args["port"])
 
 out = loadOutputModule(outputDriver)
 rc = out.RenderContext(outputDriver, conf, args["scale"])

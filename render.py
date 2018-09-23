@@ -77,7 +77,8 @@ class BaseRenderContext():
         }
 
     def startWebserver(self):
-        self.webserver = webserver.WebServer(self.makeRouteMap())
+        address = self.conf["listen"]
+        self.webserver = webserver.WebServer(self.makeRouteMap(), address)
         self.server = Thread(target=self.webserver.run)
         self.server.daemon = True
         self.server.start()
