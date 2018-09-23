@@ -22,18 +22,6 @@ DEFAULT_SCALE = 1
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("paperd")
 
-def readConfigFile(filename):
-    with open(filename, 'r') as configFile:
-        try:
-            conf = yaml.safe_load(configFile)[CONFIG_NAME][CONFIG_VERSION]
-        except KeyError:
-            log.exception("could not find configuration in %s" % filename)
-            sys.exit(1)
-        except yaml.parser.ParserError:
-            log.exception("syntax error")
-            sys.exit(1)
-    return conf
-
 def readArgs():
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -63,12 +51,15 @@ args = readArgs()
 log.debug(args)
 log.info("paperd - epaper display server")
 
+import config
 try:
-    conf = readConfigFile(args["config"])
+    conf = config.ConfTree(args["config"])
 except FileNotFoundError as e:
     log.error("could not open configuration file")
     log.error(e)
     sys.exit(1)
+
+log.debug(conf)
 
 outputDriver = DEFAULT_OUTPUT
 if args["output"] is None:
@@ -79,5 +70,3 @@ else:
 out = loadOutputModule(outputDriver)
 rc = out.RenderContext(outputDriver, conf, args["scale"])
 rc.run()
-
-log.debug(conf)
