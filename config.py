@@ -23,6 +23,10 @@ class ConfMapping(collections.defaultdict):
 
     def dfactory(self, k):
         log.debug("config value missing: %s", k)
+        if k == "align":
+            return "left"
+        if k == "overflow":
+            return "resize"
         return None
 
 class ConfTree(ConfMapping):
