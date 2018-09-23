@@ -9,8 +9,8 @@ import logging
 
 __doc__ = """epaper display server
 
-Receives images over http and renders them into predefined areas
-on an epaper display.
+Receives objects over http and renders them into predefined areas on an epaper
+display.
 """
 CONFIG_NAME = "paperd"
 CONFIG_VERSION = "v1"
