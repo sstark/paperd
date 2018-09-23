@@ -124,3 +124,6 @@ Since the original waveshare epd2in9 driver is used, and there is no low level
 tweaking going on in paperd, it is unlikely this will cause any damage to your
 display or Raspberry Pi.
 
+To get debug information from paperd, set the environment variable
+`PAPERD_LOGLEVEL` to "debug"
+

@@ -19,7 +19,14 @@ OUTPUTS = ["pil", "tk", "epd2in9"]
 DEFAULT_OUTPUT = "pil"
 DEFAULT_SCALE = 1
 
-logging.basicConfig(level=logging.INFO)
+try:
+    loglevel = os.environ["PAPERD_LOGLEVEL"]
+except:
+    loglevel = ""
+if loglevel.lower() == "debug":
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("paperd")
 
 def readArgs():
