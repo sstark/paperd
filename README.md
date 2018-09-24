@@ -38,7 +38,7 @@ for tk output (recommended for preview, not needed on target machine):
 
     apt python3-pil.imagetk
 
-For programing the epaper display, the driver for the Waveshare 2.9" (1-color
+For programming the epaper display, the driver for the Waveshare 2.9" (1-color
 version) is included. This display has a resolution of 128x296 pixels. More
 drivers will follow.
 
@@ -106,7 +106,7 @@ with curl like this:
     curl -T logo.png http://localhost:2354/v1/areas/logo
 
 By default, paperd will resize the image to fit in the dimensions of the area.
-However it is strongly recommende to provide the image in the correct
+However it is strongly recommended to provide the image in the correct
 resolution already, since rescaling will likely look bad at such a small scale.
 
 If the area you want to PUT something is of type text, you can use curl like
