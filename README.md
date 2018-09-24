@@ -56,17 +56,17 @@ The configuration file is written in yaml and looks like this:
         colordepth: 1
         maxfps: 4
         areas:
-        - name: background
+          - name: background
             type:
-            format: image
-            overflow: resize
+              format: image
+              overflow: resize
             origin: {x: 0, y: 0}
             size: {x: 296, y: 128}
-        - name: title
+          - name: title
             type:
-            format: text
-            overflow: scrolling
-            font:
+              format: text
+              overflow: scrolling
+              font:
                 face: examples/musicplayer/fonts/pf_tempesta_seven_condensed.ttf
                 size: 24
                 align: left
