@@ -49,9 +49,9 @@ class BaseRenderContext():
                 newimage = newimage.resize((xs, xy))
             self.paste(newimage, (x, y))
         elif aformat == "text":
-            newimage = Image.new('1', (xs, xy), 255)
-            newdraw = ImageDraw.Draw(newimage)
             font = a["type"]["font"]
+            newimage = Image.new('1', (xs, xy), font["background"])
+            newdraw = ImageDraw.Draw(newimage)
             try:
                 ttf = ImageFont.truetype(font["face"], font["size"])
             except OSError:
@@ -63,7 +63,7 @@ class BaseRenderContext():
                 shiftx = xs - tw
             else:
                 shiftx = 0
-            newdraw.text((shiftx, 0), newstring, font=ttf, fill=0)
+            newdraw.text((shiftx, 0), newstring, font=ttf, fill=font["color"])
             self.paste(newimage, (x, y))
         else:
             return "unknown area format '%s'" % aformat

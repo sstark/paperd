@@ -27,6 +27,10 @@ class ConfMapping(collections.defaultdict):
             return "left"
         if k == "overflow":
             return "resize"
+        if k == "color":
+            return 0
+        if k == "background":
+            return 255
         return None
 
 class ConfTree(ConfMapping):
