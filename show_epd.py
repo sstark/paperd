@@ -25,9 +25,11 @@ class RenderContext(BaseRenderContext):
 
     def clearPaper(self):
         self.screenlock.acquire()
+        self.epd.init(self.epd.lut_full_update)
         for blarg in range(2):
             self.epd.clear_frame_memory(0xFF)
             self.epd.display_frame()
+        self.epd.init(self.epd.lut_partial_update)
         self.screenlock.release()
 
     def display(self):
