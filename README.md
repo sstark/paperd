@@ -29,6 +29,8 @@ preview window on your development system.
 All testing is currently done on a Raspberry Pi Zero W and a Waveshare 2.9"
 epaper, using Raspbian stretch.
 
+![paperd screenshot](https://raw.githubusercontent.com/sstark/paperd/master/paperd.jpg)
+
 Requirements
 ------------
 
