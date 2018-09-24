@@ -50,7 +50,7 @@ The configuration file is written in yaml and looks like this:
 
     paperd:
       v1:
-        resolution: {x: &x 296, y: &y 128}
+        resolution: {x: 296, y: 128}
         orientation: 1
         output: epd2in9
         colordepth: 1
@@ -61,7 +61,7 @@ The configuration file is written in yaml and looks like this:
             format: image
             overflow: resize
             origin: {x: 0, y: 0}
-            size: {x: *x, y: *y}
+            size: {x: 296, y: 128}
         - name: title
             type:
             format: text
