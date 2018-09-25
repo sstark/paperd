@@ -6,9 +6,9 @@ import logging
 log = logging.getLogger("paperd.show_pil")
 
 class RenderContext(BaseRenderContext):
-    def __init__(self, drivername, conf, scale=1):
+    def __init__(self, drivername, conf):
         log.info("init pil output module")
-        super().__init__(drivername, conf, scale)
+        super().__init__(drivername, conf)
 
     def display(self):
         self.image.show()

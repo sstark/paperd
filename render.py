@@ -10,8 +10,8 @@ log = logging.getLogger("paperd.render")
 class BaseRenderContext():
     def __init__(self, drivername, conf, scale=1):
         self.conf = conf
-        self.width = conf["resolution"]["x"]*scale
-        self.height = conf["resolution"]["y"]*scale
+        self.width = conf["resolution"]["x"]
+        self.height = conf["resolution"]["y"]
         self.fps = conf["maxfps"]
         self.image = Image.new('1', (self.width, self.height), 255)
         self.startWebserver()

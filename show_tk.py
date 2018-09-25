@@ -12,6 +12,8 @@ class RenderContext(BaseRenderContext):
         log.info("init tk output module")
         super().__init__(drivername, conf, scale)
         self.delay = 1000//self.fps
+        self.width = conf["resolution"]["x"]*scale
+        self.height = conf["resolution"]["y"]*scale
 
         self.root = tk.Tk()
         self.tkimage = ImageTk.PhotoImage('1', (self.width, self.height))
