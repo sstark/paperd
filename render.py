@@ -32,39 +32,47 @@ class BaseRenderContext():
     def apiGetArea(self, area):
         return self.getAreaByName(area)
 
-    def apiSetArea(self, area, data):
-        a = self.getAreaByName(area)
-        if not a:
-            return "area not found"
-
+    def apiSetArea_image(self, a, data):
         x = a["origin"]["x"]
         y = a["origin"]["y"]
         xs = a["size"]["x"]
         xy = a["size"]["y"]
-        aformat = a["type"]["format"]
+        newimage = Image.open(io.BytesIO(data))
+        if a["type"]["overflow"] == "resize":
+            newimage = newimage.resize((xs, xy))
+        self.paste(newimage, (x, y))
 
+    def apiSetArea_text(self, a, data):
+        x = a["origin"]["x"]
+        y = a["origin"]["y"]
+        xs = a["size"]["x"]
+        xy = a["size"]["y"]
+        font = a["type"]["font"]
+        newimage = Image.new('1', (xs, xy), font["background"])
+        newdraw = ImageDraw.Draw(newimage)
+        try:
+            ttf = ImageFont.truetype(font["face"], font["size"])
+        except OSError:
+            log.exception("error reading font")
+            return "font not found '%s'" % font["face"]
+        newstring = data.decode("utf-8")
+        if font["align"] == "right":
+            tw, th = newdraw.textsize(newstring, font=ttf)
+            shiftx = xs - tw
+        else:
+            shiftx = 0
+        newdraw.text((shiftx, 0), newstring, font=ttf, fill=font["color"])
+        self.paste(newimage, (x, y))
+
+    def apiSetArea(self, area, data):
+        a = self.getAreaByName(area)
+        if not a:
+            return "area not found"
+        aformat = a["type"]["format"]
         if aformat == "image":
-            newimage = Image.open(io.BytesIO(data))
-            if a["type"]["overflow"] == "resize":
-                newimage = newimage.resize((xs, xy))
-            self.paste(newimage, (x, y))
+            self.apiSetArea_image(a, data)
         elif aformat == "text":
-            font = a["type"]["font"]
-            newimage = Image.new('1', (xs, xy), font["background"])
-            newdraw = ImageDraw.Draw(newimage)
-            try:
-                ttf = ImageFont.truetype(font["face"], font["size"])
-            except OSError:
-                log.exception("error reading font")
-                return "font not found '%s'" % font["face"]
-            newstring = data.decode("utf-8")
-            if font["align"] == "right":
-                tw, th = newdraw.textsize(newstring, font=ttf)
-                shiftx = xs - tw
-            else:
-                shiftx = 0
-            newdraw.text((shiftx, 0), newstring, font=ttf, fill=font["color"])
-            self.paste(newimage, (x, y))
+            self.apiSetArea_text(a, data)
         else:
             return "unknown area format '%s'" % aformat
         return None
