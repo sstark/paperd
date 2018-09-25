@@ -31,6 +31,6 @@ class RenderContext(BaseRenderContext):
         self.root.after(self.delay, self.display)
 
     def run(self):
-        log.info("run tk output module")
+        log.info("run tk output module (close with 'q')")
         self.display()
         self.root.mainloop()
