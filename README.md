@@ -80,6 +80,11 @@ examples are not implemented yet: `orientation`, `colordepth`, `scrolling`.
 
 `maxfps` is only partially implemented.
 
+If text does not fit into a text area, paperd will try to scale down the font
+size to make it fit, but only if the resulting font size is not smaller than
+half the original font size, and not smaller than 4. If the text still does not
+fit, it will be split into two lines at half the font size.
+
 Running
 -------
 
