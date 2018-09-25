@@ -12,12 +12,18 @@ paperd:
           overflow: resize
         origin: {x: 0, y: 0}
         size: {x: *x, y: *y}
+      - name: bar
+        type:
+          format: image
+          overflow: resize
+        origin: {x: 0, y: &bary 100}
+        size: {x: *x, y: 28}
       - name: run
         type:
           format: image
           overflow: resize
         origin: {x: 2, y: &icony 102}
-        size: {x: &iconw 24, y: &iconh 24}
+        size: {x: &iconw 26, y: &iconh 26}
       - name: sleep
         type:
           format: image
@@ -29,40 +35,39 @@ paperd:
           format: image
           overflow: resize
         origin: {x: 88, y: *icony}
-        size: {x: 124, y: *iconh}
+        size: {x: 124, y: 24}
       - name: volume
         type:
           format: image
           overflow: resize
         origin: {x: 88, y: *icony}
         size: {x: *iconw, y: *iconh}
-      - name: songtitle
-        type:
-          format: text
-          overflow: scrolling
-          font:
-            face: examples/musicplayer/fonts/pf_tempesta_seven_condensed_bold.ttf
-            size: 24
-            align: left
-        origin: {x: &tx 6, y: 4}
-        size: {x: &tw 292, y: &th 48}
       - name: artist
         type:
           format: text
-          overflow: scrolling
           font:
-            face: examples/musicplayer/fonts/pf_tempesta_seven_condensed.ttf
-            size: 24
+            face: &eco examples/musicplayer/fonts/Economica-Bold-OTF.otf
+            size: 28
             align: left
-        origin: {x: *tx, y: 54}
-        size: {x: *tw, y: *th}
+        origin: {x: &tx 4, y: 2}
+        size: {x: &tw 292, y: 38}
+      - name: songtitle
+        type:
+          format: text
+          font:
+            face: *eco
+            size: 40
+            align: left
+        origin: {x: *tx, y: 39}
+        size: {x: *tw, y: 60}
       - name: time
         type:
           format: text
-          overflow: scrolling
           font:
-            face: examples/musicplayer/fonts/pf_tempesta_seven_condensed.ttf
-            size: 16
+            face: examples/musicplayer/fonts/SHPinscher-Regular.otf
+            size: 24
+            color: 255
+            background: 0
             align: right
-        origin: {x: 220, y: *icony}
+        origin: {x: 220, y: *bary}
         size: {x: 74, y: *iconh}
