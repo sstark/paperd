@@ -13,6 +13,12 @@ class ConfMapping(collections.defaultdict):
 
     def __init__(self, *args, **kwargs):
         super().__init__(self.dfactory, *args, **kwargs)
+        self.defaults = {
+            "align": "left",
+            "overflow": "resize",
+            "color": 0,
+            "background": 255
+        }
 
     def __missing__(self, k):
         if self.default_factory is None:
@@ -23,15 +29,7 @@ class ConfMapping(collections.defaultdict):
 
     def dfactory(self, k):
         log.debug("config value missing: %s", k)
-        if k == "align":
-            return "left"
-        if k == "overflow":
-            return "resize"
-        if k == "color":
-            return 0
-        if k == "background":
-            return 255
-        return None
+        return self.defaults.get(k)
 
 class ConfTree(ConfMapping):
 
