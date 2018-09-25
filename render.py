@@ -4,6 +4,7 @@ import webserver
 from threading import Thread
 import io
 import logging
+from textlib import WrappedText
 
 log = logging.getLogger("paperd.render")
 
@@ -55,13 +56,19 @@ class BaseRenderContext():
         except OSError:
             log.exception("error reading font")
             return "font not found '%s'" % font["face"]
-        newstring = data.decode("utf-8")
-        if font["align"] == "right":
-            tw, th = newdraw.textsize(newstring, font=ttf)
-            shiftx = xs - tw
-        else:
-            shiftx = 0
-        newdraw.text((shiftx, 0), newstring, font=ttf, fill=font["color"])
+        newtext = data.decode("utf-8")
+        wrapped, wrapped_fs = WrappedText(newtext, (xs, xy), ttf, maxlines=2).smartWrapped()
+
+        # unfortunately for single lines we have to do right alignment
+        # ourselves:
+        shiftx = 0
+        if '\n' not in wrapped:
+            if font["align"] == "right":
+                tw, th = newdraw.textsize(newtext, font=ttf)
+                shiftx = xs - tw
+
+        newdraw.multiline_text((shiftx, 0), wrapped, fill=font["color"],
+                               font=ttf.font_variant(size=wrapped_fs), align=font["align"])
         self.paste(newimage, (x, y))
 
     def apiSetArea(self, area, data):
