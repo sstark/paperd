@@ -3,6 +3,7 @@ import yaml
 import sys
 import collections
 import logging
+import pprint
 
 CONFIG_NAME = "paperd"
 CONFIG_VERSION = "v1"
@@ -31,11 +32,18 @@ class ConfMapping(collections.defaultdict):
         log.debug("config value missing: %s", k)
         return self.defaults.get(k)
 
+    def __str__(self):
+        return pprint.pformat(dict(self.items()))
+
+    def __repr__(self):
+        return self.__str__()
+
 class ConfTree(ConfMapping):
 
     def __init__(self, filename, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.update(self.readConfigFile(filename))
+        self.origconf = self.readConfigFile(filename)
+        self.update(self.origconf)
 
     def readConfigFile(self, filename):
 
@@ -51,7 +59,7 @@ class ConfTree(ConfMapping):
         return conf
 
 def confMap_representer(dumper, data):
-    return dumper.represent_dict(data.iteritems())
+    return dumper.represent_dict(data.items())
 
 def confMap_constructor(loader, node):
     return ConfMapping(loader.construct_pairs(node))
