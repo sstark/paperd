@@ -87,6 +87,12 @@ class WebAPI(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(bytes(json.dumps(out).encode("utf-8")))
 
+    def log_message(self, format, *args):
+        log.info(format, *args)
+
+    def log_error(self, format, *args):
+        log.error(format, *args)
+
 class WebServer():
     def __init__(self, routeMap, address):
         requestHandler = partial(WebAPI, routeMap)
