@@ -36,6 +36,7 @@ class ConfMapping(collections.defaultdict):
         return pprint.pformat(dict(self.items()))
 
     def __repr__(self):
+        # https://www.python.org/dev/peps/pep-3140/
         return self.__str__()
 
 class ConfTree(ConfMapping):
