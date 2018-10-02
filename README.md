@@ -38,7 +38,7 @@ Requirements
 
 for tk output (recommended for preview, not needed on target machine):
 
-    apt python3-pil.imagetk
+    apt install python3-pil.imagetk
 
 For programming the epaper display, the driver for the Waveshare 2.9" (1-color
 version) is included. This display has a resolution of 128x296 pixels. More
