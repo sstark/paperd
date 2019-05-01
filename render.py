@@ -88,7 +88,8 @@ class BaseRenderContext():
         return {
             "getAreas": self.apiGetAreas,
             "getArea": self.apiGetArea,
-            "setArea": self.apiSetArea
+            "setArea": self.apiSetArea,
+            "update": self.update
         }
 
     def startWebserver(self):
@@ -99,6 +100,9 @@ class BaseRenderContext():
         self.server.start()
 
     def display(self):
+        pass
+
+    def update(self):
         pass
 
     def run(self):

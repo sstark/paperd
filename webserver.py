@@ -18,6 +18,7 @@ class WebAPI(BaseHTTPRequestHandler):
         self.urlsGET = {
             "/v1/areas/(.*)": self.getApiFunc("getArea"),
             "/v1/areas$": self.getApiFunc("getAreas"),
+            "/v1/update": self.getApiFunc("update")
         }
         self.urlsPUT = {
             "/v1/areas/(.*)": self.getApiFunc("setArea")

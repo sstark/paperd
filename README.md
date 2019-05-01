@@ -1,6 +1,5 @@
 
-paperd
-======
+# paperd
 
 An epaper display server.
 
@@ -31,8 +30,7 @@ epaper, using Raspbian stretch.
 
 ![paperd screenshot](https://raw.githubusercontent.com/sstark/paperd/master/paperd.jpg)
 
-Requirements
-------------
+## Requirements
 
     apt install python3-yaml python3-pil python3-rpi.gpio python3-spidev
 
@@ -45,8 +43,7 @@ version) is included. This display has a resolution of 128x296 pixels. More
 drivers will follow.
 
 
-Configuration
--------------
+## Configuration
 
 The configuration file is written in yaml and looks like this:
 
@@ -85,8 +82,7 @@ size to make it fit, but only if the resulting font size is not smaller than
 half the original font size, and not smaller than 4. If the text still does not
 fit, it will be split into two lines at half the font size.
 
-Running
--------
+## Running
 
 In order to run the included example using the tk preview run this command:
 
@@ -99,10 +95,11 @@ For running the example on your Raspberry Pi with the epd output module, simply
 remove the `-o tk` parameter and it will use whichever driver is defined in the
 configuration.
 
-Using the API
--------------
+## Using the API
 
-Currently there is only one useful api URL:
+Currently there are only two useful api URLs:
+
+### Change contents of an area
 
     PUT http://localhost:2354/v1/areas/<area>
 
@@ -121,8 +118,17 @@ this:
 
     curl -X PUT -d "the text" http://localhost:2354/v1/areas/title
 
-Development
------------
+### Update the display
+
+After you have uploaded some text or images to areas, you have to update the
+display. For this use this API call:
+
+    curl -sS http://localhost:2354/v1/update
+
+This will swap the two frame buffers of the display, showing what you have
+drawn since the last update.
+
+## Development
 
 This is an early, but working development version of paperd. Please be kind if
 it does weird things and file an issue.

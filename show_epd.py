@@ -51,12 +51,14 @@ class RenderContext(BaseRenderContext):
         rimg = image.rotate(270, expand=1)
         # store image to self for full redraws
         self.image.paste(rimg, (realx, y))
-        # the epd has two screen buffers and for now we simply update
-        # both each time. This could be improved.
         self.screenlock.acquire()
-        for blarg in range(2):
-            self.epd.set_frame_memory(rimg, realx, y)
-            self.epd.display_frame()
+        self.epd.set_frame_memory(rimg, realx, y)
+        self.screenlock.release()
+
+    def update(self):
+        # swaps buffers
+        self.screenlock.acquire()
+        self.epd.display_frame()
         self.screenlock.release()
 
     def run(self):
