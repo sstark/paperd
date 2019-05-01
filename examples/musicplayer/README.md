@@ -7,7 +7,7 @@ When it has finished starting, you can run the update script:
 
     ./update.sh
 
-This will fake a (not very elaborate) music player display. The idea of course
-is that the update script is replaced by something else that will read actual
-data from a system like Volumio.
+This will update the epaper display with data taken from an mpd server.
+
+The paperd.yml in this example assumes a 296 by 128 epaper display.
 

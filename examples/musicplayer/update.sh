@@ -1,21 +1,57 @@
-#!/bin/bash
+#!/bin/zsh
 
-URL=http://localhost:2354/v1
+# This script listens for mpd events using the mpc idleloop feature. On a song
+# change or play/pause event it will fetch new data from mpd and update paperd.
 
-push_image()    { curl -T "$1" "$URL/areas/$2"; }
-push_text()     { curl -X PUT -d "$1" "$URL/areas/$2"; }
+PAPERD_URL=http://localhost:2354/v1
+
+update()        { curl -sS "$PAPERD_URL/update" >/dev/null; }
+push_image()    { curl -sS -T "$1" "$PAPERD_URL/areas/$2" >/dev/null; }
+push_text()     { curl -sS -X PUT -d "$1" "$PAPERD_URL/areas/$2" >/dev/null; }
 set_time()      { push_text "$(date +%H:%M)" time; }
-play()          { push_image bplay.png run; }
-pause()         { push_image bpause.png run; }
+draw_bar()      { push_image bbar.png bar; push_image bvol.png volumebar; }
+play()          { draw_bar; push_image bplay.png run; }
+pause()         { draw_bar; push_image bpause.png run; }
 
-#push_image sleep.png sleep
-push_image bbar.png bar
-push_image bvol.png volumebar
-push_text "Sound Chaser" songtitle
-push_text "Yes - Relayer " artist
-play
-set_time
-while sleep 10
+draw_bar
+
+coproc mpc idleloop
+mpc_pid=$!
+TRAPINT() { kill $mpc_pid; exit; }
+TRAPTERM() { kill $mpc_pid; exit; }
+
+while true
 do
-	set_time
+    # all lines of mpc output in an array
+    out=(${(f)"$(mpc -f '%artist%\t%album%\t%title%\t[(%date%)]' status)"})
+    state="/"
+    if [[ $#out == 3 ]]
+    then
+        songdata=$out[1]
+        # split first line by tabs
+        song=("${(@s:	:)songdata}")
+        artist=$song[1]
+        album=$song[2]
+        title=$song[3]
+        date=$song[4]
+        case $out[2] in
+            "[playing]"*)
+                state=🕩
+                print "display play icon"
+                play
+                ;;
+            "[paused]"*)
+                state=🕨
+                print "display pause icon"
+                pause
+                ;;
+        esac
+        push_text "${title}" songtitle
+        push_text "${artist} - ${album} ${date}" artist
+    fi
+    print "${state} ${song}"
+    update
+    print "waiting for mpd event... (ctrl-c to quit)"
+    # wait until the mpc co-process outputs something
+    read -ep
 done
