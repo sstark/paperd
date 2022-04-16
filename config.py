@@ -1,5 +1,6 @@
 
 import yaml
+import yaml.parser
 import sys
 import collections
 import logging
