@@ -50,7 +50,7 @@ class ConfTree(ConfMapping):
 
         with open(filename, 'r') as configFile:
             try:
-                conf = yaml.load(configFile)[CONFIG_NAME][CONFIG_VERSION]
+                conf = yaml.full_load(configFile)[CONFIG_NAME][CONFIG_VERSION]
             except TypeError:
                 log.exception("could not find configuration in %s" % filename)
                 sys.exit(1)
