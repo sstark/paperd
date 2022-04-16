@@ -23,6 +23,9 @@ class WrappedText():
             width, height = self.font.font_variant(size=fontsize).getsize(self.text[0:c])
             if width < xs:
                 return c
+        # if we could not find a good font size at least we should return a
+        # valid count value
+        return 1
 
     def wrapped(self, fontsize=False):
         """ Insert line breaks where needed
