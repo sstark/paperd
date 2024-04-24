@@ -30,13 +30,15 @@ epaper, using Raspbian stretch.
 
 ![paperd screenshot](https://raw.githubusercontent.com/sstark/paperd/master/paperd.jpg)
 
-## Requirements
+## Installation
 
-    apt install python3-yaml python3-pil python3-rpi.gpio python3-spidev
+Recommended:
 
-for tk output (recommended for preview, not needed on target machine):
+     pipx install paperd
 
-    apt install python3-pil.imagetk
+Run the development version without installation:
+
+     poetry run paperd
 
 For programming the epaper display, the driver for the Waveshare 2.9" (1-color
 version) is included. This display has a resolution of 128x296 pixels. More
