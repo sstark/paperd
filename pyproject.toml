@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "paperd"
+version = "0.1.0"
+description = "epaper display server"
+authors = ["Sebastian Stark <sstark@mailbox.org>"]
+license = "ISC"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pyyaml = "^6.0.1"
+pillow = "^10.3.0"
+spidev = "^3.6"
+rpi-gpio = "^0.7.1"
+
+[tool.poetry.scripts]
+paperd = "paperd.paperd:cli"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,5 +1,5 @@
 
-from render import BaseRenderContext
+from paperd.render import BaseRenderContext
 from PIL import Image, ImageTk
 import tkinter as tk
 import random

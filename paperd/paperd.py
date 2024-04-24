@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import yaml
 import sys
 import argparse
 import importlib
@@ -57,35 +56,36 @@ def readArgs():
 def loadOutputModule(drivername):
     try:
         if drivername.startswith("epd"):
-            return importlib.import_module("show_epd")
+            return importlib.import_module("paperd.show_epd")
         else:
-            return importlib.import_module("show_"+drivername)
+            return importlib.import_module("paperd.show_"+drivername)
     except ModuleNotFoundError:
         log.exception("could not load output module '%s' (or one of its dependencies)" % drivername)
         sys.exit(1)
 
-args = readArgs()
-log.debug(args)
-log.info("paperd - epaper display server")
+def cli():
+    args = readArgs()
+    log.debug(args)
+    log.info("paperd - epaper display server")
 
-import config
-try:
-    conf = config.ConfTree(args["config"])
-except FileNotFoundError as e:
-    log.error("could not open configuration file")
-    log.error(e)
-    sys.exit(1)
+    from paperd import config
+    try:
+        conf = config.ConfTree(args["config"])
+    except FileNotFoundError as e:
+        log.error("could not open configuration file")
+        log.error(e)
+        sys.exit(1)
 
-log.debug(conf)
+    log.debug(conf)
 
-outputDriver = DEFAULT_OUTPUT
-if args["output"] is None:
-    outputDriver = conf["output"]
-else:
-    outputDriver = args["output"]
+    outputDriver = DEFAULT_OUTPUT
+    if args["output"] is None:
+        outputDriver = conf["output"]
+    else:
+        outputDriver = args["output"]
 
-conf["listen"] = (args["listen"], args["port"])
+    conf["listen"] = (args["listen"], args["port"])
 
-out = loadOutputModule(outputDriver)
-rc = out.RenderContext(outputDriver, conf, args["scale"])
-rc.run()
+    out = loadOutputModule(outputDriver)
+    rc = out.RenderContext(outputDriver, conf, args["scale"])
+    rc.run()

@@ -1,7 +1,7 @@
 
 import importlib
 import sys
-from render import BaseRenderContext
+from paperd.render import BaseRenderContext
 import time
 import threading
 import logging
@@ -11,7 +11,7 @@ log = logging.getLogger("paperd.show_epd")
 class RenderContext(BaseRenderContext):
     def __init__(self, drivername, conf, scale=1):
         try:
-            self.driver = importlib.import_module("epd."+drivername)
+            self.driver = importlib.import_module("paperd.epd."+drivername)
         except ModuleNotFoundError:
             log.exception("could not load output driver '%s' (or one of its dependencies)" % drivername)
             sys.exit(1)

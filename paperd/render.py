@@ -1,10 +1,10 @@
 
 from PIL import Image, ImageDraw, ImageFont
-import webserver
+from paperd import webserver
 from threading import Thread
 import io
 import logging
-from textlib import WrappedText
+from paperd.textlib import WrappedText
 
 log = logging.getLogger("paperd.render")
 
