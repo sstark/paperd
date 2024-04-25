@@ -32,7 +32,7 @@ epaper, using Raspbian stretch.
 
 ## Installation
 
-Recommended:
+Recommended (work in progress!):
 
      pipx install paperd
 
