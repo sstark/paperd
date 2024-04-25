@@ -16,6 +16,11 @@ rpi-gpio = "^0.7.1"
 [tool.poetry.scripts]
 paperd = "paperd.paperd:cli"
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.1.1"
+mypy = "^1.10.0"
+flake8 = "^7.0.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
